@@ -1,0 +1,4 @@
+---
+# vars file for roles/influxdb
+influxdb_user: telegraf
+influxdb_password: telegraf

@@ -1,0 +1,33 @@
+---
+- name: Install xz-utils, python3-pip Packages
+  ansible.builtin.apt:
+    update_cache: true
+    name: "{{ item }}"
+    state: present
+  loop:
+    - python3-pip
+    - xz-utils
+
+- name: Download InfluxDB Package version {{ influxdb_version }}
+  ansible.builtin.get_url:
+    url: https://dl.influxdata.com/influxdb/releases/influxdb_{{ influxdb_version }}_amd64.deb
+    dest: "/tmp/influxdb_{{ influxdb_version }}_amd64.deb"
+    mode: "0700"
+    force: true
+
+- name: Install InfluxDB
+  ansible.builtin.apt:
+    deb: /tmp/influxdb_{{ influxdb_version }}_amd64.deb
+    force: true
+
+- name: Remove influxdb installation package
+  ansible.builtin.file:
+    path: /tmp/influxdb_{{ influxdb_version }}_amd64.deb
+    state: absent
+
+- name: Start and enable InfluxDB service
+  ansible.builtin.systemd:
+    name: influxdb
+    state: started
+    enabled: true
+  notify: Restart InfluxDB

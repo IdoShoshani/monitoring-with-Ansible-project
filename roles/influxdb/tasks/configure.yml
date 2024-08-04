@@ -1,0 +1,58 @@
+---
+- name: Ensure InfluxDB directories exist with correct permissions
+  file:
+    path: /var/lib/influxdb/{{ item }}
+    state: directory
+    owner: influxdb
+    group: influxdb
+    mode: '0755'
+  loop:
+    - meta
+    - data
+    - wal
+
+- name: Install influxdb python module
+  ansible.builtin.pip:
+    name: influxdb
+    state: present
+  ignore_errors: true
+  register: result_install_influxdb
+
+- name: Install influxdb python module with apt - only if "Install influxdb python module" failed
+  ansible.builtin.apt:
+    name: python3-influxdb
+    state: present
+  when: result_install_influxdb.failed
+
+- name: Wait for InfluxDB to become available
+  wait_for:
+    host: "{{ ansible_hostname }}"
+    port: 8086
+    delay: 10
+    timeout: 300
+
+- name: Create InfluxDB database for telegraf
+  community.general.influxdb_database:
+    hostname: "{{ ansible_hostname }}"
+    database_name: "{{ influxdb_database_name }}"
+    state: present
+
+- name: Create InfluxDB user
+  community.general.influxdb_user:
+    admin: true
+    user_name: "{{ influxdb_user }}"
+    user_password: "{{ influxdb_password }}"
+    state: present
+
+- name: Pause for 2 min
+  ansible.builtin.pause:
+    minutes: 2
+
+- name: Config influxdb file with template
+  ansible.builtin.template:
+    src: influxdb.j2
+    dest: /etc/influxdb/influxdb.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart InfluxDB

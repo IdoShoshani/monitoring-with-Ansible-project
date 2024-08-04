@@ -1,0 +1,10 @@
+---
+# tasks file for roles/influxdb
+- name: Remove influxdb if exist
+  ansible.builtin.include_tasks: remove_influxdb.yml
+
+- name: Install influxdb
+  ansible.builtin.include_tasks: install_influxdb.yml
+
+- name: Config influxdb
+  ansible.builtin.include_tasks: configure.yml
