@@ -7,3 +7,6 @@
   hosts: telegraf
   roles:
     - telegraf
+  vars:
+    influxdb_user: telegraf
+    influxdb_password: telegraf
