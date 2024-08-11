@@ -1,9 +1,26 @@
-- name: Ensure that influxdb in unistalled
+- name: Ensure that influxdb in uninstalled
   ansible.builtin.apt:
     name: influxdb
     state: absent
     autoremove: true
     autoclean: true
+
+- name: Purge InfluxDB
+  ansible.builtin.apt:
+    name: influxdb
+    state: absent
+    purge: yes
+
+- name: Delete InfluxDB user and its home directory
+  ansible.builtin.user:
+    name: influxdb
+    state: absent
+    remove: yes
+
+- name: Delete InfluxDB group
+  ansible.builtin.group:
+    name: influxdb
+    state: absent  
 
 - name: Delete Influxdb configuration dicretories
   ansible.builtin.file:
