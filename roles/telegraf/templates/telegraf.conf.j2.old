@@ -1,0 +1,9 @@
+[[inputs.disk]]
+  ignore_fs = ["tmpfs", "devtmpfs", "devfs", "iso9660", "overlay", "aufs", "squashfs"]
+
+[[outputs.influxdb]]
+  urls = ["http://{{ influxdb_host }}:8086"]
+  database = "{{ influxdb_db }}"
+  username = "{{ influxdb_user }}"
+  password = "{{ influxdb_password }}"
+  skip_database_creation = true

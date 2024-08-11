@@ -1,0 +1,13 @@
+---
+# tasks file for roles/telegraf
+- name: Remove telegraf if exist
+  ansible.builtin.include_tasks: remove_telegraf.yml
+
+- name: Install telegraf
+  ansible.builtin.include_tasks: install_telegraf.yml
+
+- name: Config Disk and InfluxDB plugins
+  ansible.builtin.include_tasks: configure.yml
+ 
+# Doesn't work
+# ansible.builtin.include_tasks: configure_new.yml 
