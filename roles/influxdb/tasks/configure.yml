@@ -31,18 +31,20 @@
     delay: 10
     timeout: 300
 
-- name: Create InfluxDB database for telegraf
-  community.general.influxdb_database:
-    hostname: "{{ ansible_hostname }}"
-    database_name: "{{ influxdb_database_name }}"
-    state: present
-
 - name: Create InfluxDB user
   community.general.influxdb_user:
     admin: true
     user_name: "{{ influxdb_user }}"
     user_password: "{{ influxdb_password }}"
     state: present
+
+- name: Create InfluxDB database for telegraf
+  community.general.influxdb_database:
+    username: "{{ influxdb_user }}"
+    password: "{{ influxdb_password }}"
+    database_name: "{{ influxdb_database_name }}"
+    state: present
+
 
 - name: Pause for 2 min
   ansible.builtin.pause:
