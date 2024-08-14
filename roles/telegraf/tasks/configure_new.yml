@@ -1,0 +1,10 @@
+---
+# tasks file for roles/telegraf
+# - name: Copy template to /etc/telegraf/telegraf.conf
+#   ansible.builtin.template:
+#     src: telegraf.j2
+#     dest: /etc/telegraf/telegraf.conf
+#     owner: telegraf
+#     group: telegraf
+#     mode: '0644'
+#   notify: restart telegraf

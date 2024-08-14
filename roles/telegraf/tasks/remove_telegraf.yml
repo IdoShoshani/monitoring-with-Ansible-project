@@ -1,0 +1,33 @@
+---
+
+- name: Remove APT repository for InfluxDB
+  ansible.builtin.shell: |
+    # Remove the APT repository list file
+    sudo rm -f /etc/apt/sources.list.d/influxdata.list
+
+    # Remove the GPG key
+    sudo rm -f /etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg
+
+    # Remove the downloaded key file (if it still exists)
+    rm -f influxdata-archive_compat.key
+
+    # Update apt cache after removing the repository
+    sudo apt-get update
+
+- name: Remove telegraf config file
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop: 
+    - /var/log/telegraf
+    - /etc/telegraf
+
+- name: Remove telegraf an Update apt package list
+  ansible.builtin.apt:
+    name: telegraf
+    state: absent
+    purge: true
+  
+- name: Check and remove remaining dependencies
+  ansible.builtin.apt:
+    autoremove: true
