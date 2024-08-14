@@ -1,0 +1,9 @@
+#- name: Setup influxdb
+#  hosts: influxdb
+#  become: true
+#  roles:
+#    - influxdb
+- name: Setup telegraf
+  hosts: telegraf
+  roles:
+    - telegraf

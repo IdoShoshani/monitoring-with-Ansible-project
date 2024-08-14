@@ -1,0 +1,9 @@
+---
+# defaults file for roles/influxdb
+influxdb_version: 1.8.10
+influxdb_database_name: telegraf
+influxdb_http_enabled: true
+influxdb_bind_address: ":8086"
+influxdb_auth_enabled: true
+influxdb_reporting_disabled: true
+# influxdb_https_enabled: true

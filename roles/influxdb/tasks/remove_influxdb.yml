@@ -1,0 +1,15 @@
+- name: Ensure that influxdb in unistalled
+  ansible.builtin.apt:
+    name: influxdb
+    state: absent
+    autoremove: true
+    autoclean: true
+
+- name: Delete Influxdb configuration dicretories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/influxdb
+    - /var/lib/influxdb
+    - /var/log/influxdb
